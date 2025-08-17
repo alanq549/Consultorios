@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultorio Dashboard</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 2px solid #007bff;
+        }
+        .nav {
+            display: flex;
+            gap: 15px;
+        }
+        .nav a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .card h3 {
+            margin: 0;
+            color: #007bff;
+        }
+        .card p {
+            margin: 5px 0 0;
+            font-size: 1.2em;
+            color: #555;
+        }
+        .calendar {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .calendar h3 {
+            color: #007bff;
+        }
+        .reviews {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .reviews p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Consultorio Dashboard</h1>
+            <div class="nav">
+                <a href="#">Citas</a>
+                <a href="#">Clientes</a>
+                <a href="#">Servicios</a>
+                <a href="#">Reportes</a>
+            </div>
+        </div>
+        <div class="metrics">
+            <div class="card">
+                <h3>Citas Totales</h3>
+                <p>145</p>
+            </div>
+            <div class="card">
+                <h3>Clientes Atendidos</h3>
+                <p>120 <span style="color: green;">(Completadas)</span></p>
+            </div>
+            <div class="card">
+                <h3>Puntuación</h3>
+                <p>4.8/5</p>
+            </div>
+            <div class="card">
+                <h3>Servicios Activos</h3>
+                <p>8</p>
+            </div>
+        </div>
+        <div class="calendar">
+            <h3>Calendario de Citas</h3>
+            <p>Próxima cita: 26/07/2025, 9:00 AM - Consulta General</p>
+        </div>
+        <div class="reviews">
+            <h3>Reseñas Recientes</h3>
+            <p>"Excelente atención, muy profesional." - María G.</p>
+            <p>"Todo perfecto, recomendado!" - Juan P.</p>
+        </div>
+    </div>
+</body>
+<script>
+    console.log(localStorage.getItem("token"))
+    console.log(localStorage.getItem("user"))
+</script>
+</html>

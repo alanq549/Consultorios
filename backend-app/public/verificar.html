@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Verificación de cuenta</title>
+</head>
+
+<body>
+    <h1>Verificando cuenta...</h1>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get("code");
+
+        fetch(`http://localhost:3000/api/auth/verify?code=${code}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.token && data.user) {
+                    // Guardamos en localStorage
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("user", JSON.stringify(data.user));
+
+                    // Redirección según el rol
+                    const role = data.user.role;
+                    if (role === "PROFESSIONAL") {
+                        window.location.href = "/dashboard-professional.html";
+                    } else if (role === "CLIENT") {
+                        window.location.href = "/dashboard-client.html";
+                    } else {
+                        document.body.innerHTML = "<h2>Rol no reconocido</h2>";
+                    }
+                } else {
+                    document.body.innerHTML = "<h2>Error inesperado</h2>";
+                }
+            })
+            .catch((err) => {
+                console.error("Error:", err);
+                document.body.innerHTML = "<h2>Error al verificar tu cuenta</h2>";
+            });
+    </script>
+</body>
+
+</html>

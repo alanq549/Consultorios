@@ -1,0 +1,30 @@
+
+/* src/styles/components/userMenu.css */
+
+.user-menu-button {
+  @apply flex items-center gap-2 rounded-full hover:bg-teal-200/70 p-2 dark:hover:bg-neutral-600;
+}
+
+.user-avatar {
+  @apply w-8 h-8 rounded-full object-cover;
+}
+
+.user-name {
+  @apply text-sm font-medium;
+}
+
+.user-menu-items-sidebar {
+  @apply absolute left-0 bottom-full p-1 mb-2 w-40 origin-bottom-left rounded-lg bg-white dark:bg-neutral-700 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50;
+}
+
+.user-menu-items-topbar {
+  @apply absolute right-0 mt-2 w-40 origin-top-right rounded-md bg-white dark:bg-neutral-700 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 overflow-visible;
+}
+
+.user-menu-item {
+  @apply flex w-full items-center rounded-md px-2 py-2 text-sm;
+}
+
+.user-menu-item-active {
+  @apply bg-gray-100 dark:bg-neutral-600;
+}
