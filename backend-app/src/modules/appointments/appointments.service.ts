@@ -302,13 +302,14 @@ export const createAppointment = async (
   clientId: number
 ) => {
   const { serviceId, professionalId, date, startTime, notes } = data;
+  const appointmentDateTime = dayjs.tz(`${date} ${startTime}`, "YYYY-MM-DD HH:mm", DEFAULT_TZ);
 
   const appointment = await prisma.appointment.create({
     data: {
       clientId,
       serviceId,
       professionalId,
-      date: new Date(date),
+      date: appointmentDateTime.toDate(), // ahora sí toma la zona correcta
       startTime,
       notes,
     },

@@ -1,48 +1,38 @@
 // modules/appointments/appointments.validation.ts
 import { z } from "zod";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import tz from "dayjs/plugin/timezone";
 
-// Convierte "YYYY-MM-DD" a Date en zona local, sin desfasaje UTC
-function parseDateLocal(dateStr: string): Date {
-  const [year, month, day] = dateStr.split("-").map(Number);
-  return new Date(year, month - 1, day);
-}
+dayjs.extend(utc);
+dayjs.extend(tz);
+
+const DEFAULT_TZ = "America/Mexico_City";
 
 export const createAppointmentSchema = z.object({
   serviceId: z.number().int(),
   professionalId: z.number().int(),
 
   date: z.string()
-    .refine((val) => !isNaN(Date.parse(val)), { message: "Fecha inválida" })
-    .refine((val) => {
-      const selected = parseDateLocal(val);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return selected >= today;
-    }, { message: "No puedes agendar para días pasados" }),
+    .refine((val) => dayjs(val, "YYYY-MM-DD", true).isValid(), { message: "Fecha inválida" }),
 
   startTime: z.string()
     .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: "Hora inválida, usa formato HH:mm" }),
 
   notes: z.string().optional(),
-
 }).refine((data) => {
   if (!data.date || !data.startTime) return true;
 
-  const [hours, minutes] = data.startTime.split(":").map(Number);
-  const [year, month, day] = data.date.split("-").map(Number);
+  // Combinar fecha + hora en zona México
+  const appointmentDateTime = dayjs.tz(`${data.date} ${data.startTime}`, "YYYY-MM-DD HH:mm", DEFAULT_TZ);
 
-  const selectedDate = new Date(year, month - 1, day, hours, minutes);
+  const nowMX = dayjs().tz(DEFAULT_TZ).subtract(2, "minute"); // tolerancia 2 min
 
-  const now = new Date();
-  now.setMinutes(now.getMinutes() -2); // tolerancia de 5 min
-
-  return selectedDate.getTime() > now.getTime();
+  return appointmentDateTime.isAfter(nowMX);
 }, {
   message: "No puedes agendar para una hora pasada",
   path: ["startTime"],
 });
-
-
 
 
 
@@ -70,34 +60,25 @@ export const updateAppointmentSchema = z.object({
 
   date: z.string()
     .optional()
-    .refine((val) => !val || !isNaN(Date.parse(val)), { message: "Fecha inválida" })
-    .refine((val) => {
-      if (!val) return true;
-      const selected = parseDateLocal(val);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return selected >= today;
-    }, { message: "No puedes agendar para días pasados" }),
-      status: z.enum(["PENDING", "CONFIRMED", "CANCELLED", "COMPLETED"]).optional(),
+    .refine((val) => !val || dayjs(val, "YYYY-MM-DD", true).isValid(), { message: "Fecha inválida" }),
 
+  startTime: z.string()
+    .optional()
+    .refine((val) => !val || /^([01]\d|2[0-3]):([0-5]\d)$/.test(val), { message: "Hora inválida, usa formato HH:mm" }),
 
-  startTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: "Hora inválida, usa formato HH:mm" })
-  .optional(),
+  status: z.enum(["PENDING", "CONFIRMED", "CANCELLED", "COMPLETED"]).optional(),
 
   notes: z.string().optional(),
 
 }).refine((data) => {
   if (!data.date || !data.startTime) return true;
 
-  const [hours, minutes] = data.startTime.split(":").map(Number);
-  const [year, month, day] = data.date.split("-").map(Number);
+  // Combinar fecha + hora en zona México
+  const appointmentDateTime = dayjs.tz(`${data.date} ${data.startTime}`, "YYYY-MM-DD HH:mm", DEFAULT_TZ);
 
-  const selectedDate = new Date(year, month - 1, day, hours, minutes);
+  const nowMX = dayjs().tz(DEFAULT_TZ).subtract(2, "minute"); // tolerancia 2 min
 
-  const now = new Date();
-  now.setMinutes(now.getMinutes() - 2); // tolerancia de 2 min
-
-  return selectedDate.getTime() > now.getTime();
+  return appointmentDateTime.isAfter(nowMX);
 }, {
   message: "No puedes agendar para una hora pasada",
   path: ["startTime"],
