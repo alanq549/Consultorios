@@ -20,8 +20,6 @@ export default function Register({ toggleFlip }: LoginProps) {
     error,
   } = useRegister();
 
-  const apiURl = import.meta.env.VITE_API_URL;
-  console.log("Ruta del api base ",apiURl);
   const { data: specialties, isLoading: isLoadingSpecialties } =
     useSpecialties();
   const [avatarMessage, setAvatarMessage] = useState<string | null>(null);

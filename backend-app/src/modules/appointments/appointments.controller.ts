@@ -23,8 +23,7 @@ export const createAppointmentController = async (
     return res.status(401).json({ message: "No autorizado" });
   }
 
-  console.log("Request body recibido:", req.body); // 👈 log de lo que envía el front
-  console.log("Hora actual del servidor:", new Date().toISOString());
+
 
   const parsed = createAppointmentSchema.safeParse(req.body);
   if (!parsed.success) {
