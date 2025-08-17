@@ -1,3 +1,3 @@
 import { GlobalWorkerOptions } from "pdfjs-dist";
 
-GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js"; // apunta a public/
+GlobalWorkerOptions.workerSrc = import.meta.env.VITE_STATIC_URL + "/pdf.worker.min.js";
