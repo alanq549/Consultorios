@@ -1,5 +1,6 @@
 
-import { PrismaClient } from "./prisma/generated";
+import { PrismaClient } from "@prisma/client";
+
 
 const prisma = new PrismaClient({
   // Opciones como logging, etc. acá si quieres
